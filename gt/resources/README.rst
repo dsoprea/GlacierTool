@@ -12,6 +12,26 @@ Notes
 - The Amazon library (`boto <https://github.com/boto/boto>`_) that many/most people use to access AWS services (including Glacier) is `currently broken for multipart uploads <https://github.com/boto/boto/issues/2603>`_. Plus, the version that seems to work fine for multipart uploads is broken for Python 3. So, this library uses *boto* version 2.29.1 under Python 2.7 .
 
 
+Installation
+============
+
+Install via PIP::
+
+    $ sudo pip install glacier_tool
+    Downloading/unpacking glacier-tool
+      Downloading glacier_tool-0.2.3.tar.gz
+      Running setup.py (path:/tmp/pip_build_root/glacier-tool/setup.py) egg_info for package glacier-tool
+        
+    Requirement already satisfied (use --upgrade to upgrade): boto==2.29.1 in /usr/local/lib/python2.7/dist-packages (from glacier-tool)
+    Installing collected packages: glacier-tool
+      Running setup.py install for glacier-tool
+        
+        changing mode of build/scripts-2.7/gt_upload_large from 644 to 755
+        changing mode of /usr/local/bin/gt_upload_large to 755
+    Successfully installed glacier-tool
+    Cleaning up...
+
+
 Usage
 =====
 
