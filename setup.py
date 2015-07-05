@@ -12,7 +12,7 @@ with open(os.path.join(app_path, 'resources', 'requirements.txt')) as f:
       install_requires = list(map(lambda s: s.strip(), f.readlines()))
 
 setuptools.setup(
-      name='glacier-tool',
+      name='glacier_tool',
       version=gt.__version__,
       description="Do concurrent, multipart uploads of massive archives to Amazon Glacier.",
       long_description=long_description,
