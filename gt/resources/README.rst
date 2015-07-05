@@ -7,9 +7,9 @@ This is a tool to allow you to quickly push massive archives into Glacier, an ul
 Notes
 =====
 
-- This project is meant for large uploads. It doesn't do small-uploads (the mechanism Currently, this project only provides the mechanism to upload quickly. I couldn't find another reliable, current tool to do large uploads, so I wrote one. I'll write a download-tool in the near future. Until then, use what's already out there or request one via an issue.
+- This project is meant for large, multipart uploads whose size exceeds the part-size parameter. It won't upload anything smaller and this project doesn't include a tool for downloads. I couldn't find another reliable, maintained tool to do large uploads, so I wrote one (this). I'll write a large, multipart download-tool in the near future. Until then, use what's already out there or post an issue-request. If there's an active need that precedes mine then I'll prioritize that task.
 
-- The Amazon library (`boto <https://github.com/boto/boto>`_) that many/most people use to access AWS services (including Glacier) is currently broken for multipart uploads and the version that seems to work fine for multipart uploads is broken for Python 3. So, this library uses *boto* version 2.29.1 under Python 2.7 .
+- The Amazon library (`boto <https://github.com/boto/boto>`_) that many/most people use to access AWS services (including Glacier) is `currently broken for multipart uploads <https://github.com/boto/boto/issues/2603>`_. Plus, the version that seems to work fine for multipart uploads is broken for Python 3. So, this library uses *boto* version 2.29.1 under Python 2.7 .
 
 
 Usage
