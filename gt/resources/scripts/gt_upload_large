@@ -1,0 +1,104 @@
+#!/usr/bin/env python2.7
+
+import argparse
+import os
+import time
+import datetime
+
+import boto.glacier.layer2
+
+_SECONDS_IN_HOUR = 3600
+_BITS_IN_BYTE = 8
+_BYTES_IN_MB = 1024 * 1024
+_BYTES_IN_GB = _BYTES_IN_MB * 1024
+_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+def _parse_args():
+    description = "Push a large archive into long-term storage."
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument(
+        'vault_name',
+        help="Vault name")
+
+    parser.add_argument(
+        'filepath',
+        help="File-path to upload")
+
+    parser.add_argument(
+        'description',
+        help="Description of uploaded file")
+
+    parser.add_argument(
+        '-em', '--estimated-mbps',
+        type=float,
+        help="Mbps to estimate a duration against")
+
+    args = parser.parse_args()
+    return args
+
+def _upload(vault_name, filepath, description, est_rate_mbps=None):
+    filesize_b = os.stat(filepath).st_size
+    filesize_mb = (filesize_b / float(_BYTES_IN_MB))
+    filesize_gb = (filesize_b / float(_BYTES_IN_GB))
+
+    print("Uploading: [{0}]".format(filepath))
+    print("Size: ({:.2f}) G".format(filesize_gb))
+
+    # Acquire Glacier resource. We read the environment-variables here rather 
+    # than above so that they won't need to be defined jsut to print the 
+    # command-line help.
+
+    access_key = os.environ['AWS_ACCESS_KEY']
+    secret_key = os.environ['AWS_SECRET_KEY']
+
+    l = boto.glacier.layer2.Layer2(
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key)
+
+    v = l.get_vault(vault_name)
+
+    # If we can, estimate the duration.
+
+    now_dt = datetime.datetime.now()
+    print("Start time: [{0}]".format(now_dt.strftime(_TIME_FORMAT)))
+
+    if est_rate_mbps is not None:
+        est_rate_b = (est_rate_mbps / float(_BITS_IN_BYTE) * float(_BYTES_IN_MB))
+        est_b_s = float(filesize_b) / est_rate_b
+        est_b_h = est_b_s / float(_SECONDS_IN_HOUR)
+        est_finished_dt = now_dt + datetime.timedelta(seconds=est_b_s)
+
+        print("Estimated duration: ({:.2f}) hours => [{:s}] @ ({:.2f}) Mbps".\
+              format(est_b_h, est_finished_dt.strftime(_TIME_FORMAT), 
+                     est_rate_mbps))
+
+    start_epoch = time.time()
+
+    # Execute the upload.
+
+    archive_id = v.concurrent_create_archive_from_file(filepath, description)
+    print("Archive ID: [{0}]".format(archive_id))
+
+    # Calculate statistics.
+
+    duration_s = time.time() - start_epoch
+    duration_h = duration_s / float(_SECONDS_IN_HOUR)
+
+    actual_rate_mbps = filesize_mb / float(duration_s) * float(_BITS_IN_BYTE)
+
+    print("Duration: ({:.2f}) hours @ ({:.2f}) Mbps".\
+          format(duration_h, actual_rate_mbps))
+
+def _main():
+    args = _parse_args()
+
+    vault_name = args.vault_name
+    filepath = args.filepath
+    description = args.description
+    est_rate_mbps = args.estimated_mbps
+
+    _upload(vault_name, filepath, description, est_rate_mbps=est_rate_mbps)
+
+if __name__ == '__main__':
+    _main()
