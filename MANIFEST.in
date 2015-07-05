@@ -1,2 +1,2 @@
-include svncl/resources/*
-include svncl/resources/scripts/*
+include gt/resources/*
+include gt/resources/scripts/*
