@@ -56,6 +56,6 @@ To perform the upload, you'll have to define the AWS access- and secret-key in t
     Start time: [2015-07-05 10:07:58]
     Estimated duration: (5.33) hours => [2015-07-05 15:28:03] @ (11.37) Mbps
 
-Notice that the output tells you the actual rate of the upload (the *boto* call that I use doesn't provide a progress callback with which to provide realtime feedback). You can pass this value into the command for the next upload with the "-em" parameter to estimate the time-until-completion.
+Notice that the output tells you the actual rate of the upload (the *boto* call that this uses doesn't provide a progress callback with which to provide realtime feedback). You can pass this value into the command for the next upload with the "-em" parameter to estimate the time-until-completion.
 
-It's probably best to record the archive-IDs somewhere. It'll take you four-hours for an inventory request to be fulfilled (to get a list of your archives) and Amazon only uploads its inventory of your archives every twenty-four hours (so you won't even be able to get a list the first day).
+It's probably best to record the archive-IDs somewhere. It'll take you four-hours for an inventory request to be fulfilled (to get a list of your archives) and Amazon only updates its inventory of your archives every twenty-four hours (so you won't even be able to get one until the second day).
