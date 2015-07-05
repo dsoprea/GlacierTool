@@ -9,7 +9,7 @@ Notes
 
 - Currently, this project only provides the mechanism to upload quickly. I couldn't find another reliable, current tool to do uploads, so I wrote one. I'll write a download-tool in the near future. Until then, use wht's already out there or request one via an issue.
 
-- The Amazon library (`boto <https://github.com/boto/boto>_`) that many/most people use to access AWS services (including Glacier) is currently broken for multipart uploads and the version that seems to work fine for multipart uploads is broken for Python 3. So, this library uses *boto* version 2.29.1 under Python 2.7 .
+- The Amazon library (`boto <https://github.com/boto/boto>`_) that many/most people use to access AWS services (including Glacier) is currently broken for multipart uploads and the version that seems to work fine for multipart uploads is broken for Python 3. So, this library uses *boto* version 2.29.1 under Python 2.7 .
 
 
 Usage
@@ -17,9 +17,9 @@ Usage
 
 The command is fully-documented at the command-line. Just provide the "-h" parameter to print the usage::
 
-    $ glacier_push_large -h
-    usage: glacier_push_large [-h] [-em ESTIMATED_MBPS]
-                              vault_name filepath description
+    $ gt_upload_large -h
+    usage: gt_upload_large [-h] [-em ESTIMATED_MBPS]
+                           vault_name filepath description
 
     Push a large archive into long-term storage.
 
