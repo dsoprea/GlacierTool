@@ -1,0 +1,2 @@
+include svncl/resources/*
+include svncl/resources/scripts/*
