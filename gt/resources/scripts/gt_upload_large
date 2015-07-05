@@ -34,10 +34,17 @@ def _parse_args():
         type=float,
         help="Mbps to estimate a duration against")
 
+    parser.add_argument(
+        '-pt', '--part-size',
+        type=int,
+        default=4194304,
+        help="Part-size in bytes. Defaults to 4M. Must be between 1M and 4G.")
+
     args = parser.parse_args()
     return args
 
-def _upload(vault_name, filepath, description, est_rate_mbps=None):
+def _upload(vault_name, filepath, description, part_size_b, 
+            est_rate_mbps=None):
     filesize_b = os.stat(filepath).st_size
     filesize_mb = (filesize_b / float(_BYTES_IN_MB))
     filesize_gb = (filesize_b / float(_BYTES_IN_GB))
@@ -77,7 +84,11 @@ def _upload(vault_name, filepath, description, est_rate_mbps=None):
 
     # Execute the upload.
 
-    archive_id = v.concurrent_create_archive_from_file(filepath, description)
+    archive_id = v.concurrent_create_archive_from_file(
+                    filepath, 
+                    description, 
+                    part_size=part_size_b)
+
     print("Archive ID: [{0}]".format(archive_id))
 
     # Calculate statistics.
@@ -96,9 +107,15 @@ def _main():
     vault_name = args.vault_name
     filepath = args.filepath
     description = args.description
+    part_size_b = args.part_size
     est_rate_mbps = args.estimated_mbps
 
-    _upload(vault_name, filepath, description, est_rate_mbps=est_rate_mbps)
+    _upload(
+        vault_name, 
+        filepath, 
+        description, 
+        part_size_b, 
+        est_rate_mbps=est_rate_mbps)
 
 if __name__ == '__main__':
     _main()

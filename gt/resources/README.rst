@@ -1,13 +1,13 @@
 Introduction
 ============
 
-This is a tool to allow you to quickly push massive archives into Glacier, an ultra low-cost storage solution. It's fast to upload and cheap to maintain (currently $10 per Terabyte/Month), but there's a delay in all retrieval requests and a finite window to then download.
+This is a tool to allow you to quickly push massive archives into Glacier, an ultra low-cost storage solution. It's fast to upload and cheap to maintain (currently $10 per terabyte/month), but there's a four-hour delay in all retrieval requests and a finite window to download.
 
 
 Notes
 =====
 
-- Currently, this project only provides the mechanism to upload quickly. I couldn't find another reliable, current tool to do uploads, so I wrote one. I'll write a download-tool in the near future. Until then, use wht's already out there or request one via an issue.
+- This project is meant for large uploads. It doesn't do small-uploads (the mechanism Currently, this project only provides the mechanism to upload quickly. I couldn't find another reliable, current tool to do large uploads, so I wrote one. I'll write a download-tool in the near future. Until then, use what's already out there or request one via an issue.
 
 - The Amazon library (`boto <https://github.com/boto/boto>`_) that many/most people use to access AWS services (including Glacier) is currently broken for multipart uploads and the version that seems to work fine for multipart uploads is broken for Python 3. So, this library uses *boto* version 2.29.1 under Python 2.7 .
 
@@ -18,7 +18,7 @@ Usage
 The command is fully-documented at the command-line. Just provide the "-h" parameter to print the usage::
 
     $ gt_upload_large -h
-    usage: gt_upload_large [-h] [-em ESTIMATED_MBPS]
+    usage: gt_upload_large [-h] [-em ESTIMATED_MBPS] [-pt PART_SIZE]
                            vault_name filepath description
 
     Push a large archive into long-term storage.
@@ -32,6 +32,9 @@ The command is fully-documented at the command-line. Just provide the "-h" param
       -h, --help            show this help message and exit
       -em ESTIMATED_MBPS, --estimated-mbps ESTIMATED_MBPS
                             Mbps to estimate a duration against
+      -pt PART_SIZE, --part-size PART_SIZE
+                            Part-size in bytes. Defaults to 4M. Must be between 1M
+                            and 4G.
 
 
 To perform the upload, you'll have to define the AWS access- and secret-key in the environment::
