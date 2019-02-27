@@ -40,10 +40,16 @@ def _parse_args():
         default=4194304,
         help="Part-size in bytes. Defaults to 4M. Must be between 1M and 4G.")
 
+    parser.add_argument(
+        '-r', '--region',
+        type=str,
+        default="us-east-1",
+        help="AWS region of vault. Defaults to us-east-1.")
+
     args = parser.parse_args()
     return args
 
-def _upload(vault_name, filepath, description, part_size_b, 
+def _upload(vault_name, filepath, description, part_size_b, region,
             est_rate_mbps=None):
     filesize_b = os.stat(filepath).st_size
     filesize_mb = (filesize_b / float(_BYTES_IN_MB))
@@ -61,7 +67,8 @@ def _upload(vault_name, filepath, description, part_size_b,
 
     l = boto.glacier.layer2.Layer2(
             aws_access_key_id=access_key,
-            aws_secret_access_key=secret_key)
+            aws_secret_access_key=secret_key,
+            region_name=region)
 
     v = l.get_vault(vault_name)
 
@@ -109,12 +116,14 @@ def _main():
     description = args.description
     part_size_b = args.part_size
     est_rate_mbps = args.estimated_mbps
+    region = args.region
 
     _upload(
         vault_name, 
         filepath, 
         description, 
-        part_size_b, 
+        part_size_b,
+        region,
         est_rate_mbps=est_rate_mbps)
 
 if __name__ == '__main__':
