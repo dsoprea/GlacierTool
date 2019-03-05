@@ -55,6 +55,8 @@ The command is fully-documented at the command-line. Just provide the "-h" param
       -pt PART_SIZE, --part-size PART_SIZE
                             Part-size in bytes. Defaults to 4M. Must be between 1M
                             and 4G.
+      -r REGION, --region REGION
+                            AWS region of vault. Defaults to us-east-1.
 
 
 To perform the upload, you'll have to define the AWS access- and secret-key in the environment::
